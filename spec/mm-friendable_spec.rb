@@ -97,4 +97,20 @@ describe "MongoMapper::Plugins::Friendable" do
 
   end
   
+  describe "following?" do
+    
+    before(:each) do
+      @friendable.add_friend!(@friend)
+    end
+  
+    it "should return true if following" do
+      @friendable.following?(@friend).should be_true 
+    end
+    
+    it "should return false if not following" do
+      @friend.following?(@friendable).should be_false 
+    end
+
+  end
+  
 end
