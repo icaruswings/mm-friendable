@@ -44,6 +44,10 @@ You must implement the on_add_friend and on_remove_friend callbacks! - however t
     @user_2.followers #=> [<User>] 
     @user_2.followers.first == @user_1 #=> true
 
+    @user_1.following(@user_2) #=> true
+    @user_2.following(@user_1) #=> false
+
+
 == Contributing to mm-friendable
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
