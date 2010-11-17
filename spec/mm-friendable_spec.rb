@@ -7,7 +7,7 @@ describe "MongoMapper::Plugins::Friendable" do
     @friend = User.create(:email => 'luke@icaruswings.com')
   end
 
-  it "should be commentable" do
+  it "should be friendable" do
     @friendable.should be_friendable
   end
 
@@ -23,67 +23,42 @@ describe "MongoMapper::Plugins::Friendable" do
   it "should have a method for retrieving friends" do
     @friendable.should respond_to(:following)
   end
+  
+  it "should provide the User with a friend_list" do
+    @friendable.should respond_to(:friend_list)
+    @friendable.friend_list.should be_a(FriendList)
+  end
 
-  describe "add_vote!" do
+  describe "add_friend!" do
   
     it "should increment the following_count attribute" do
       lambda {
         @friendable.add_friend!(@friend)
-        @friendable.reload
+
       }.should change(@friendable, :following_count).by(1) 
     end
     
     it "should increment the followers_count attribute" do
       lambda {
         @friendable.add_friend!(@friend)
-        @friend.reload
+
       }.should change(@friend, :followers_count).by(1) 
     end
     
-    it "should add the following" do
+    it "should add the friend to following list" do
       @friendable.add_friend!(@friend)
-      @friendable.reload
-      
+
+      @friendable.friend_list.following_ids.should include(@friend.id)
       @friendable.following.should include(@friend)
     end
     
     it "should add the follower" do
       @friendable.add_friend!(@friend)
-      @friend.reload
-      
+
+      @friend.friend_list.followers_ids.should include(@friendable.id)
       @friend.followers.should include(@friendable)
     end
 
   end
   
 end
-
-# describe "Comment" do
-#   
-#   before(:each) do
-#     @comment = Comment.new
-#   end
-#   
-#   it "should be embeddable?" do
-#     Comment.embeddable?.should be_true
-#   end
-#   
-#   it "should be embeddable?" do
-#     Comment.embeddable?.should be_true
-#   end
-#   
-#   it "should have a created_at key" do
-#     @comment.should respond_to(:created_at=)
-#     @comment.should respond_to(:created_at)
-#   end
-#   
-#   it "should have a commentor association" do
-#     @comment.should respond_to(:commentor_id=)
-#     @comment.should respond_to(:commentor_id)
-#     @comment.should respond_to(:commentor_type=)
-#     @comment.should respond_to(:commentor_type)
-#     
-#     @comment.commentor.association.should be_belongs_to
-#   end
-#   
-# end

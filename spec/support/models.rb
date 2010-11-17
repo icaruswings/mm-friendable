@@ -5,7 +5,8 @@ class User
   key :email, String
   
   def on_add_friend(friend)
-    true
+    reload
+    friend.reload
   end
   
 end
