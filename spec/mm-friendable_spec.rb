@@ -31,6 +31,12 @@ describe "MongoMapper::Plugins::Friendable" do
 
   describe "add_friend!" do
   
+    it "should error if on_add_friend callback is not implemented" do
+      @friendable = UserNoCallbacks.create
+
+      lambda { @friendable.add_friend!(@friend) }.should raise_error(NotImplementedError)
+    end
+    
     it "should increment the following_count attribute" do
       lambda {
         @friendable.add_friend!(@friend)
@@ -66,6 +72,20 @@ describe "MongoMapper::Plugins::Friendable" do
     before(:each) do
       @friendable.add_friend!(@friend)
     end
+    
+    it "should error if on_add_friend callback is not implemented" do
+      @friendable = UserNoCallbacks.create
+      @friendable.class_eval {
+        def on_add_friend(friend)
+          reload
+          friend.reload
+        end
+      }
+      @friendable.add_friend!(@friend)
+
+      lambda { @friendable.remove_friend!(@friend) }.should raise_error(NotImplementedError)
+    end
+    
   
     it "should decrement the following_count attribute" do
       lambda {

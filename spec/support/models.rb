@@ -14,3 +14,10 @@ class User
     friend.reload
   end
 end
+
+class UserNoCallbacks
+  include MongoMapper::Document
+  plugin MongoMapper::Plugins::Friendable
+
+  key :email, String
+end
