@@ -61,4 +61,40 @@ describe "MongoMapper::Plugins::Friendable" do
 
   end
   
+  describe "remove_friend!" do
+    
+    before(:each) do
+      @friendable.add_friend!(@friend)
+    end
+  
+    it "should decrement the following_count attribute" do
+      lambda {
+        @friendable.remove_friend!(@friend)
+
+      }.should change(@friendable, :following_count).by(-1) 
+    end
+    
+    it "should decrement the followers_count attribute" do
+      lambda {
+        @friendable.remove_friend!(@friend)
+
+      }.should change(@friend, :followers_count).by(-1) 
+    end
+    
+    it "should remove the friend" do
+      @friendable.remove_friend!(@friend)
+
+      @friendable.friend_list.following_ids.should_not include(@friend.id)
+      @friendable.following.should_not include(@friend)
+    end
+    
+    it "should remove the follower" do
+      @friendable.remove_friend!(@friend)
+
+      @friend.friend_list.followers_ids.should_not include(@friendable.id)
+      @friend.followers.should_not include(@friendable)
+    end
+
+  end
+  
 end

@@ -9,4 +9,8 @@ class User
     friend.reload
   end
   
+  def on_remove_friend(friend)
+    reload
+    friend.reload
+  end
 end
