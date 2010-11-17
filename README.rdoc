@@ -1,6 +1,48 @@
 = mm-friendable
 
-Description goes here.
+A simple MongoMapper plugin to add friendship functionality to your application
+
+== Usage
+
+Install the gem
+  
+    gem install mm-friendable
+
+
+Or add it to your Gemfile
+
+    gem 'mm-friendable'
+  
+  
+Then add the friendable plugin to you MongoMapper::Document
+
+    class User
+      include MongoMapper::Document
+      plugin MongoMapper::Plugins::Friendable
+
+      def on_add_friend(friend)
+        do something when a friend is added...
+      end
+      
+      def on_remove_friend(friend)
+        do something when a friend is removed...
+      end
+    end
+    
+You must implement the on_add_friend and on_remove_friend callbacks! - however they can be empty implementations
+  
+    @user_1 = User.create
+    @user_2 = User.create
+  
+    @user_1.add_friend!(@user_2)
+  
+    @user_1.following_count #=> 1
+    @user_1.following #=> [<User>]
+    @user_1.following.first == @user_2 #=> true
+
+    @user_2.followers_count #=> 1
+    @user_2.followers #=> [<User>] 
+    @user_2.followers.first == @user_1 #=> true
 
 == Contributing to mm-friendable
  
@@ -11,6 +53,7 @@ Description goes here.
 * Commit and push until you are happy with your contribution
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+
 
 == Copyright
 
