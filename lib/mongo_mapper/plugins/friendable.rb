@@ -3,21 +3,20 @@ require File.join(File.dirname(__FILE__), 'friendable', 'friend_list')
 module MongoMapper
   module Plugins
     module Friendable
+      extend ActiveSupport::Concern
 
-      def self.configure(model)
-        model.class_eval do
-          key :friend_list, FriendList
+      included do
+        key :friend_list, FriendList
 
-          key :followers_count, Integer, :default => 0
-          key :following_count, Integer, :default => 0
+        key :followers_count, Integer, :default => 0
+        key :following_count, Integer, :default => 0
 
-          before_create :create_friend_list
-          
-          def friendable?; true; end
-        end
+        before_create :create_friend_list       
       end
 
       module InstanceMethods
+
+        def friendable?; true; end
 
         def add_friend!(friend)
           return false if friend == self

@@ -1,13 +1,9 @@
 source "http://rubygems.org"
 
 group :development do
-  gem 'mongo', '1.1.2'
-  gem 'bson_ext', '1.1.2'
-  gem 'mongo_ext'
-  gem 'mongo_mapper'
+  gem 'bson_ext', '1.3.0'
+  gem 'mongo_mapper', '0.9.0'
   gem 'i18n'
-  
-  gem 'log_buddy'
   
   gem 'ruby-debug'
   gem "rspec", "~> 2.1.0"
